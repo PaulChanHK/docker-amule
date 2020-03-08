@@ -2,6 +2,7 @@
 # references:
 # 1. https://github.com/alpinelinux/aports/blob/master/testing/amule/APKBUILD
 # 2. https://github.com/tchabaud/dockerfiles/blob/afe0fc68d12eb3d89693320b18a9d7018ef3bc31/amule/Dockerfile
+# 3. https://git.alpinelinux.org/aports/tree/testing/crypto++/APKBUILD
 
 ARG ENV_IMG="paulchan/amule:env-1.0"
 
@@ -63,15 +64,9 @@ RUN ( git clone ${CRYP_GIT} -b ${CRYP_BCH} --single-branch \
   &&   echo Changes in $OLDTAG..HEAD : \
   &&   git log --pretty=oneline $OLDTAG..HEAD | \
        sed -r 's/^([0-9a-f]{8})[0-9a-f]{32}(.*)/\1\2/'; } | tee /pkg/CHANGES_CRYP \
-  && sed -i -e 's/^CXXFLAGS/#CXXFLAGS/' GNUmakefile \
-  && export CXXFLAGS="${CXXFLAGS} -DNDEBUG -fPIC" \
-  && make -j$(nproc) -f GNUmakefile  >/dev/null \
-  && make -j$(nproc) libcryptopp.so  >/dev/null \
-  && mkdir -p /usr/include/cryptopp /pkg/usr/include/cryptopp \
-  && install -Dm644 libcryptopp.so* /usr/lib/ \
-  && install -m644 *.h /usr/include/cryptopp/ \
-  && install -Dm644 libcryptopp.so* /pkg/usr/lib/ \
-  && install -m644 *.h /pkg/usr/include/cryptopp/ \
+  && make CXXFLAGS="${CXXFLAGS} -DNDEBUG -fPIC" -j$(nproc) -f GNUmakefile dynamic >/dev/null \
+  && make PREFIX="/usr" install \
+  && make DESTDIR=/pkg PREFIX="/usr" install \
   )
 
 RUN ( git clone ${SRC_GIT} -b ${SRC_BCH} --single-branch \
