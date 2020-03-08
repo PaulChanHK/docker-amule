@@ -73,7 +73,7 @@ if [[ ! -f ${AMULE_CONF} ]]; then
     echo "${AMULE_CONF} file NOT found. Generating new default configuration ..."
     cat > ${AMULE_CONF} <<- EOM
 [eMule]
-AppVersion=2.3.1
+AppVersion=2.3.2
 Nick=http://www.aMule.org
 QueueSizePref=50
 MaxUpload=0
@@ -174,6 +174,7 @@ ShowRatesOnTitle=0
 GeoLiteCountryUpdateUrl=http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
 StatsServerName=Shorty's ED2K stats
 StatsServerURL=http://ed2k.shortypower.dyndns.org/?hash=
+CreateSparseFiles=1
 [Browser]
 OpenPageInTab=1
 CustomBrowserString=
