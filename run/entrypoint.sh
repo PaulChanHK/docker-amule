@@ -290,4 +290,12 @@ fi
 
 chown -R "${AMULE_UID}:${AMULE_GID}" /home/amule
 
-su amule sh -c "exec amuled ${AMULE_ARGS}"
+if [ ! -e "${AMULE_HOME}/entrypoint_sample.sh" ]; then
+    cp "$0" "${AMULE_HOME}/entrypoint_sample.sh"
+    chown amule: "${AMULE_HOME}/entrypoint_sample.sh"
+fi
+
+# skip amuled for debug
+# sh -c "exec sleep infinity"
+
+su amule sh -c "umask 0002; exec amuled ${AMULE_ARGS}"
